@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.OrientationEventListener;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
@@ -89,28 +90,31 @@ public final class CameraActivity extends Activity {
     private boolean mDetectOnly;
     private LinearLayout customOverlayLayout;
     private boolean waitingForPermission;
-    private static TextView textView;
+
 
     private RelativeLayout mUIBar;
     private RelativeLayout mMainLayout;
     private boolean useApplicationTheme;
 
     static private int numActivityAllocations;
-
     private FaceScanner mCardScanner;
-
     private boolean manualEntryFallbackOrForced = false;
-
- 
     static Bitmap markedCardImage = null;
-
     static FaceOverlayView modifiedImage;
 
     static Activity thisActivity = null;
-	
+    static TextView textView;
+    static TextView textView2;
+
     public static void showScore(String score)
     {
         textView.setText(score);
+    }
+
+    public static void showScore(Integer score)
+    {
+        Toast.makeText(thisActivity, "Updating text...", Toast.LENGTH_SHORT).show();
+        textView2.setText(String.valueOf(score));
     }
 
     class MyGLSurfaceView extends GLSurfaceView {
@@ -570,9 +574,23 @@ public final class CameraActivity extends Activity {
         textView.setTextSize(60);
         textView.setTypeface(Typeface.DEFAULT_BOLD);
         textView.setTextColor(Color.WHITE);
-        //rel.addView(modifiedImage);
         rel.addView(textView);
+
+
+        textView2 = new TextView(this);
+        textView2.setText("0");
+        textView2.setTextSize(60);
+        textView2.setTypeface(Typeface.DEFAULT_BOLD);
+        textView2.setTextColor(Color.WHITE);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+        textView2.setLayoutParams(params);
+        rel.addView(textView2);
         mMainLayout.addView(rel);
+
+
 
         mUIBar = new RelativeLayout(this);
         mUIBar.setGravity(Gravity.BOTTOM);

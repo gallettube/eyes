@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
@@ -57,18 +58,21 @@ public class FaceOverlayView extends View {
             mFaces = detector.detect(frame);
         }
 
-        // AKI EL  PUTO TEXTO MAIKELO
+        // the text
         if(isEyeToggled()){
-            blinkCount++;
             CameraActivity.showScore("Eyes Closed");
         }else{
             CameraActivity.showScore("Eyes Open");
+        }
+        if(isEyeBlinked()){
+            blinkCount++;
+            CameraActivity.showScore(blinkCount);
         }
 
         invalidate();
     }
 
-    // Parpadeo
+    // blinking
     private boolean isEyeBlinked(){
 
         if(mFaces.size()==0)
@@ -97,7 +101,7 @@ public class FaceOverlayView extends View {
     }
 
 
-    // Cerrado
+    // Closed fuction
     private boolean isEyeToggled() {
 
         if (mFaces.size() == 0)
